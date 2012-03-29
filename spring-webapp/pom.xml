@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<!-- Artifact definition -->
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>es.aarmenta.templates</groupId>
+	<artifactId>spring-webapp</artifactId>
+	<packaging>war</packaging>
+	<version>1.0</version>
+	<name>spring-webapp</name>
+	<organization>
+		<name>No organization</name>
+	</organization>
+
+	<!-- Maven properties -->
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.test.skip>true</maven.test.skip>
+		<spring.version>3.1.1.RELEASE</spring.version>
+		<slf4j.version>1.6.4</slf4j.version>
+		<logback.version>1.0.0</logback.version>
+	</properties>
+
+	<!-- Perfiles para la construccion diferentes entornos | Ej: mvn -Pintegracion
+		clean install -->
+	<profiles>
+		<profile>
+			<id>des</id>
+			<!-- Si no se indica ningun perfil, por defecto se activara perfil "desarrollo" -->
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<profileResources>src/main/resources/des</profileResources>
+			</properties>
+			<build>
+				<resources>
+					<resource>
+						<directory>src/main/resources/comun</directory>
+						<filtering>true</filtering>
+					</resource>
+					<resource>
+						<directory>${profileResources}</directory>
+						<filtering>true</filtering>
+					</resource>
+				</resources>
+			</build>
+		</profile>
+		<profile>
+			<id>int</id>
+			<properties>
+				<profileResources>src/main/resources/int</profileResources>
+			</properties>
+			<build>
+				<resources>
+					<resource>
+						<directory>src/main/resources/comun</directory>
+						<filtering>true</filtering>
+					</resource>
+					<resource>
+						<directory>${profileResources}</directory>
+						<filtering>true</filtering>
+					</resource>
+				</resources>
+			</build>
+		</profile>
+		<profile>
+			<id>prod</id>
+			<properties>
+				<profileResources>src/main/resources/prod</profileResources>
+			</properties>
+			<build>
+				<resources>
+					<resource>
+						<directory>src/main/resources/comun</directory>
+						<filtering>true</filtering>
+					</resource>
+					<resource>
+						<directory>${profileResources}</directory>
+						<filtering>true</filtering>
+					</resource>
+				</resources>
+			</build>
+		</profile>
+	</profiles>
+
+	<!-- Parametros / plugins para modelar la construccion -->
+	<build>
+		<finalName>${project.artifactId}</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.5</source>
+					<target>1.5</target>
+					<showWarnings>true</showWarnings>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<!-- Dependencies -->
+	<dependencies>
+		
+		<!-- Spring -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring.version}</version>
+			<exclusions>
+				<!-- Excluimos commons-logging para sustituirlo por puente para slf4j -->
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<!-- Logger -->
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${logback.version}</version>
+		</dependency>
+
+		<dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+
+
+	</dependencies>
+
+	<!-- Repositorios para busqueda de artefactos -->
+	<repositories>
+		<repository>
+			<id>repo2.maven.org</id>
+			<name>repo2.maven.org</name>
+			<url>http://repo2.maven.org/maven2</url>
+		</repository>
+		<repository>
+			<id>java.net</id>
+			<name>java.net</name>
+			<url>http://download.java.net/maven/2/</url>
+		</repository>
+		<repository>
+			<id>jboss.maven.repository</id>
+			<name>jboss.maven.repository</name>
+			<url>http://repository.jboss.org/nexus/content/groups/public</url>
+		</repository>
+	</repositories>
+</project>
